@@ -128,6 +128,7 @@ searchBtn.addEventListener("click", async () => {
           <p>BTC: ${data.packageDetails.btc}</p>
           <p>Shipping Fee: $${data.packageDetails.shippingFee.toLocaleString()}</p>
           <p>Value: $${data.packageDetails.packageValue.toLocaleString()}</p>
+          <h2>TOTAL AMOUNT: $${(Number(data.packageDetails.packageValue) + Number(data.packageDetails.shippingFee)).toLocaleString()}</h2>
           <p>Status: <span class="status">${data.packageDetails.paymetStatus}</span></p>
            <iframe
             src="https://www.google.com/maps?q=${encodeURIComponent(origin)}&z=12&output=embed"
