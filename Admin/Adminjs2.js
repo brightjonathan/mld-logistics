@@ -27,12 +27,12 @@ import {
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyDMEdWetMVAcU67LE9Ap2OK0Hc7xM0eRaY",
-  authDomain: "logisticahub-6c129.firebaseapp.com",
-  projectId: "logisticahub-6c129",
-  storageBucket: "logisticahub-6c129.firebasestorage.app",
-  messagingSenderId: "811773110824",
-  appId: "1:811773110824:web:1738991164c323341b631d"
+  apiKey: "AIzaSyAboX9JZXxNpHzHDDepCYcQgLeQcC3j0a8",
+  authDomain: "mldlogistic.firebaseapp.com",
+  projectId: "mldlogistic",
+  storageBucket: "mldlogistic.firebasestorage.app",
+  messagingSenderId: "234347877453",
+  appId: "1:234347877453:web:f3691aee2d934c1bcbf804"
 };
 
 // Initialize Firebase
@@ -513,6 +513,7 @@ function renderShipments(shipments) {
 
       <div class="invoice-actions">
         <button class="delete-btn">Delete</button>
+        <button class="pdf-btn">Download PDF</button>
       </div>
     `;
 
@@ -524,7 +525,100 @@ function renderShipments(shipments) {
       loadShipments();
     });
 
+    // 📄 DOWNLOAD PDF
+    div.querySelector(".pdf-btn").addEventListener("click", () => {
+      downloadPDF(div, data.id);
+    });
+
+    async function downloadPDF(element, id) {
+  // Clone element so we don't affect UI
+  const clone = element.cloneNode(true);
+
+  // Remove buttons
+  const actions = clone.querySelector(".invoice-actions");
+  if (actions) actions.remove();
+
+  // Add styling
+  clone.style.background = "#fff";
+  clone.style.padding = "20px";
+  clone.style.width = "800px";
+  clone.style.position = "relative";
+
+  // =========================
+  // ✅ ADD LOGO
+  // =========================
+  const logo = document.createElement("img");
+  logo.src = "https://i.ibb.co/v4s35hxr/favicon.png";
+  //USING https://imgbb.com/
+  // 👉 Replace with your real logo URL
+
+  logo.style.width = "120px";
+  logo.style.marginBottom = "10px";
+
+  clone.prepend(logo);
+
+  // =========================
+  // ✅ ADD COMPANY HEADER
+  // =========================
+  const header = document.createElement("div");
+  header.innerHTML = `
+    <h2 style="margin:0;">MLD LOGISTICS LIMITED</h2>
+    <small>Official Shipment Receipt</small>
+    <hr/>
+  `;
+  clone.prepend(header);
+
+  // =========================
+  // ✅ ADD QR CODE
+  // =========================
+  const qrContainer = document.createElement("div");
+  qrContainer.style.position = "absolute";
+  qrContainer.style.top = "20px";
+  qrContainer.style.right = "20px";
+
+  clone.appendChild(qrContainer);
+
+  // Generate QR (Tracking link or ID)
+  new QRCode(qrContainer, {
+    text: `Tracking ID: ${id}`, // 👉 you can change to a URL
+    width: 80,
+    height: 80
+  });
+
+  // Add to DOM temporarily
+  document.body.appendChild(clone);
+
+  // Wait a bit for QR to render
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  // Convert to canvas
+  const canvas = await html2canvas(clone, {
+    scale: 2
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const imgWidth = 190;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+
+  // Save
+  pdf.save(`MLD-Receipt-${id}.pdf`);
+
+  // Clean up
+  document.body.removeChild(clone);
+}
+
+// end of downloadPDF function
+
+
     shipmentsContainer.appendChild(div);
+
+
   });
 }
 
