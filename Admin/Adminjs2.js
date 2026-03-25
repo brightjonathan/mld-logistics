@@ -514,7 +514,9 @@ function renderShipments(shipments) {
       <div class="section">
         <h4>Payment Details</h4>
         <h5>Payment Method: ${data.moreDetails.paymentMethod}<br></h5>
-        payment number: ${data.packageDetails.btc} <br>
+       payment number: <span style="word-break: break-all; overflow-wrap: anywhere; display:inline-block; max-width:100%;">
+          ${data.packageDetails.btc}
+        </span><br>
         Tax/Clearance charge: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
         <h3 style="color: #356922ea;">TOTAL AMOUNT: $${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
         Status: <b>${data.packageDetails.paymetStatus}</b>
