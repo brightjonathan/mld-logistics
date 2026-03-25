@@ -577,14 +577,23 @@ function renderShipments(shipments) {
   // ✅ ADD LOGO
   // =========================
   const logo = document.createElement("img");
-  logo.src = "https://i.ibb.co/v4s35hxr/favicon.png";
-  //USING https://imgbb.com/
-  // 👉 Replace with your real logo URL
+  const logo2 = document.createElement("img");
+  const img1 = 'https://i.ibb.co/v4s35hxr/favicon.png';
+  const img2 = 'https://i.ibb.co/XrB1Lz1H/img23-removebg-preview.png';
+  logo.src = `${img2}`; // 👉 your logo URL
+  logo2.src = `${img1}`; // 👉 your logo URL
+  
+  logo.crossOrigin = "anonymous";
+  logo2.crossOrigin = "anonymous";
 
-  logo.style.width = "120px";
+  logo.style.width = "30%";
   logo.style.marginBottom = "10px";
 
+  logo2.style.width = "30%";
+  logo2.style.marginBottom = "10px";
+
   clone.prepend(logo);
+  clone.prepend(logo2);
 
   // =========================
   // ✅ ADD COMPANY HEADER
@@ -622,7 +631,9 @@ function renderShipments(shipments) {
 
   // Convert to canvas
   const canvas = await html2canvas(clone, {
-    scale: 2
+    scale: 2,
+    useCORS: true,
+    allowTaint: false
   });
 
   const imgData = canvas.toDataURL("image/png");
