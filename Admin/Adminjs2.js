@@ -820,6 +820,15 @@ searchBtn.addEventListener("click", async () => {
 
     trackingResult.innerHTML = `
       <div class="invoice">
+
+      <div style="text-align:center; margin-bottom:15px;">
+      <img src="https://i.ibb.co/v4s35hxr/favicon.png" 
+           alt="Company Logo" 
+           style="width:25%; height:auto;">
+           <img src="https://i.ibb.co/XrB1Lz1H/img23-removebg-preview.png" 
+           alt="Company Logo" 
+           style="width:25%; height:auto;">
+    </div>
         <div class="invoice-header">
           <div>
             <h3>Shipment Invoice</h3>
