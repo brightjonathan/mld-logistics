@@ -143,28 +143,30 @@ shipmentForm.addEventListener("submit", async (e) => {
     const shipmentType = document.getElementById("shipmentType").value;
     const weight = document.getElementById("weight").value.trim();
     const courier = document.getElementById("courier").value.trim();
-    const packageCount = document.getElementById("packageCount").value;
+    // const packageCount = document.getElementById("packageCount").value;
     const product = document.getElementById("product").value.trim();
     const quantity = document.getElementById("quantity").value;
+    const TrasitCountry = document.getElementById('shipmentTransitCountryStatus').value.trim()
 
     // More Details
     const paymentMethod = document.getElementById("paymentMethod").value;
-    const totalFreight = document.getElementById("totalFreight").value;
+    // const totalFreight = document.getElementById("totalFreight").value;
     const carrier = document.getElementById("carrier").value;
     const carrierRef = document.getElementById("carrierRef").value;
     const departureTime = document.getElementById("departureTime").value;
     const pickupDate = document.getElementById("pickupDate").value;
+    const paymentTransitStatus = document.getElementById('paymentTransitStatus').value.trim();
 
     // Package Details
     const pickupTime = document.getElementById("pickupTime").value;
     const expectedDelivery = document.getElementById("expectedDelivery").value;
-    const packageQuantity = document.getElementById("packageQuantity").value;
+    // const packageQuantity = document.getElementById("packageQuantity").value;
     const description = document.getElementById("description").value.trim();
-    const length = document.getElementById("length").value;
-    const height = document.getElementById("height").value;
-    const weight2 = document.getElementById("weight2").value;
+    // const length = document.getElementById("length").value;
+    // const height = document.getElementById("height").value;
+    // const weight2 = document.getElementById("weight2").value;
     const width = document.getElementById("width2").value;
-    const packageValue = document.getElementById("packageValue").value;
+    // const packageValue = document.getElementById("packageValue").value;
     const shippingFee = document.getElementById("shippingFee").value;
     const paymetStatus = document.getElementById("paymentStatus").value;
     const btc = document.getElementById("btc").value;
@@ -196,28 +198,30 @@ shipmentForm.addEventListener("submit", async (e) => {
         type: shipmentType,
         weight,
         courier,
-        packageCount,
+        // packageCount,
         product,
         quantity,
+        TrasitCountry
       },
       moreDetails: {
         paymentMethod,
-        totalFreight,
+        // totalFreight,
         carrier,
         carrierRef,
         departureTime,
         pickupDate,
+        paymentTransitStatus
       },
       packageDetails: {
         pickupTime,
         expectedDelivery,
-        packageQuantity,
+        // packageQuantity,
         description,
-        length,
-        height,
-        weight2,
+        // length,
+        // height,
+        // weight2,
         width,
-        packageValue,
+        // packageValue,
         shippingFee,
         paymetStatus,
         btc
@@ -462,61 +466,72 @@ function renderShipments(shipments) {
 
       <div class="section invoice-grid">
         <div>
-          <h4>Shipper</h4>
+          <h4>Sender Details</h4>
           ${data.shipper.name}<br>
           ${data.shipper.phone}<br>
           ${data.shipper.country} <br>
-          ${data.shipper.email}
+          ${data.shipper.state}<br>
+          ${data.shipper.email} 
+          ${data.shipper.address ? `<br>${data.shipper.address}` : ""}
         </div>
         <div>
-          <h4>Receiver</h4>
+          <h4>Receiver Details</h4>
           ${data.receiver.name}<br>
           ${data.receiver.phone}<br>
+          ${data.receiver.state}<br>
           ${data.receiver.country} <br>
           ${data.receiver.email}
+          ${data.receiver.address ? `<br>${data.receiver.address}` : ""}
         </div>
       </div>
 
       <div class="section invoice-grid">
         <div>
-          <h4>Shipment</h4>
+          <h4>Shipment Details</h4>
           Type: ${data.shipment.type}<br>
           Product: ${data.shipment.product}<br>
+          weight: ${data.shipment.weight}kg<br>
           Quantity: ${data.shipment.quantity}<br>
-          Courier: ${data.shipment.courier}
+          Courier: ${data.shipment.courier} <br>
+          Width: ${data.packageDetails.width}cm
+          <h3 style="color: #2c541dea;">Transit country: ${data.shipment.TrasitCountry}</h3>
         </div>
 
-        <div>
-          <h4>Package</h4>
-          Weight: ${data.packageDetails.weight2}kg<br>
-          Length: ${data.packageDetails.length}<br>
-          Height: ${data.packageDetails.height}<br>
-          Width: ${data.packageDetails.width}
-        </div>
+        
 
         <div>
-          <h4>Details</h4>
+          <h4> Package Details</h4>
           Description: ${data.packageDetails.description}<br>
+          carrier Reference: ${data.moreDetails.carrierRef}<br>
+          carrier: ${data.moreDetails.carrier}<br>
           Pickup Date: ${data.moreDetails.pickupDate}<br>
-          Expected Delivery: ${data.packageDetails.expectedDelivery}
+          Departure Time: ${data.moreDetails.departureTime}<br>
+          Expected Delivery: ${data.packageDetails.expectedDelivery}<br>
+          <h3 style="color: #c24d17ea;">Transit Status: ${data.moreDetails.paymentTransitStatus}</h3>
         </div>
       </div>
 
       <div class="section">
-        <h4>Payment</h4>
-        Method: ${data.moreDetails.paymentMethod}<br>
-        BTC: ${data.packageDetails.btc}<br>
-        Shipping Fee: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
-        Package Value: $${Number(data.packageDetails.packageValue).toLocaleString()}<br>
-         <h2>TOTAL AMOUNT: $${(Number(data.packageDetails.packageValue) + Number(data.packageDetails.shippingFee)).toLocaleString()}</h2>
+        <h4>Payment Details</h4>
+        <h5>Payment Method: ${data.moreDetails.paymentMethod}<br></h5>
+        payment number: ${data.packageDetails.btc} <br>
+        Tax/Clearance charge: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
+        <h3 style="color: #356922ea;">TOTAL AMOUNT: $${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
         Status: <b>${data.packageDetails.paymetStatus}</b>
       </div>
 
       <div class="invoice-actions">
+      <button class="edit-btn">Edit</button>
         <button class="delete-btn">Delete</button>
-        <button class="pdf-btn">Download PDF</button>
+        <button class="pdf-btn">PDF</button>
       </div>
     `;
+
+
+    // ✏️ EDIT SHIPMENT
+    div.querySelector(".edit-btn").addEventListener("click", () => {
+      openEditForm(data);
+    });
 
     // 🗑 DELETE SHIPMENT
     div.querySelector(".delete-btn").addEventListener("click", async () => {
@@ -627,6 +642,127 @@ function renderShipments(shipments) {
 loadShipments();
 
 
+ function openEditForm(data) {
+  document.getElementById("editModal").style.display = "block";
+
+  document.getElementById("editTrackingId").value = data.id;
+
+  //EDIT SHIPPER DETAILS
+  document.getElementById("editShipperName").value = data.shipper.name;
+  document.getElementById("editShipperPhone").value = data.shipper.phone;
+  document.getElementById("editShipperEmail").value = data.shipper.email;
+  document.getElementById("editShipperAddress").value = data.shipper.address;
+  document.getElementById("editShipperState").value = data.shipper.state;
+  document.getElementById("editShipperCountry").value = data.shipper.country;
+
+  //EDIT RECEIVER DETAILS
+  document.getElementById("editReceiverName").value = data.receiver.name;
+  document.getElementById("editReceiverPhone").value = data.receiver.phone;
+  document.getElementById("editReceiverEmail").value = data.receiver.email;
+  document.getElementById("editReceiverAddress").value = data.receiver.address;
+  document.getElementById("editReceiverState").value = data.receiver.state;
+  document.getElementById("editReceiverCountry").value = data.receiver.country;
+
+
+  // EDIT SHIPMENT DETAILS
+  document.getElementById("editshipmentTypeone").value = data.shipment.type;
+  document.getElementById("editProduct").value = data.shipment.product;
+  document.getElementById("editWeight").value = data.shipment.weight;
+  document.getElementById("editCourier").value = data.shipment.courier;
+  document.getElementById("editQuantity").value = data.shipment.quantity;
+  document.getElementById("editShipmentTransitCountryStatus").value = data.shipment.TrasitCountry;
+
+  // EDIT MORE DETAILS
+  document.getElementById("editPaymentMethod").value = data.moreDetails.paymentMethod;
+  document.getElementById("editcarrier").value = data.moreDetails.carrier;
+  document.getElementById("editpaymentTransitStatus").value = data.moreDetails.paymentTransitStatus;
+  document.getElementById("editCarrierReference").value = data.moreDetails.carrierRef;
+  document.getElementById("editdepartureTime").value = data.moreDetails.departureTime;
+  document.getElementById("editpickupDate").value = data.moreDetails.pickupDate;
+  document.getElementById("editDescription").value = data.packageDetails.description;
+  document.getElementById("editpickupTime").value = data.packageDetails.pickupTime;
+  document.getElementById("editexpectedDelivery").value = data.packageDetails.expectedDelivery;
+  document.getElementById("editwidth2").value = data.packageDetails.width;
+  document.getElementById("editshippingFee").value = data.packageDetails.shippingFee;
+  document.getElementById("editpaymentStatus").value = data.packageDetails.paymetStatus;
+  document.getElementById("editbtc").value = data.packageDetails.btc;
+}
+
+
+
+ window.updateShipment =  async function () {
+
+  
+  const id = document.getElementById("editTrackingId").value;
+
+  try {
+    await updateDoc(doc(db, "SHIPMENT", id), {
+
+      //SHIPPER DETAILS
+      "shipper.name": document.getElementById("editShipperName").value,
+      "shipper.phone": document.getElementById("editShipperPhone").value,
+      "shipper.email": document.getElementById("editShipperEmail").value,
+      "shipper.address": document.getElementById("editShipperAddress").value,
+      "shipper.state": document.getElementById("editShipperState").value,
+      "shipper.country": document.getElementById("editShipperCountry").value,
+
+      //RECEIVER DETAILS
+      "receiver.name": document.getElementById("editReceiverName").value,
+      "receiver.phone": document.getElementById("editReceiverPhone").value,
+      "receiver.email": document.getElementById("editReceiverEmail").value,
+      "receiver.address": document.getElementById("editReceiverAddress").value,
+      "receiver.state": document.getElementById("editReceiverState").value,
+      "receiver.country": document.getElementById("editReceiverCountry").value,
+
+      // SHIPMENT DETAILS
+        "shipment.type": document.getElementById("editshipmentTypeone").value,
+        "shipment.product": document.getElementById("editProduct").value,
+        "shipment.weight": document.getElementById("editWeight").value,
+        "shipment.courier": document.getElementById("editCourier").value,
+        "shipment.quantity": document.getElementById("editQuantity").value,
+        "shipment.TrasitCountry": document.getElementById("editShipmentTransitCountryStatus").value,
+
+      //MORE DETAILS
+      "moreDetails.paymentMethod": document.getElementById("editPaymentMethod").value,
+      "moreDetails.carrier": document.getElementById("editcarrier").value,
+      "moreDetails.carrierRef": document.getElementById("editCarrierReference").value,
+      "moreDetails.departureTime": document.getElementById("editdepartureTime").value,
+      "moreDetails.pickupDate": document.getElementById("editpickupDate").value,
+      "moreDetails.paymentTransitStatus": document.getElementById("editpaymentTransitStatus").value,
+      "packageDetails.description": document.getElementById("editDescription").value,
+      "packageDetails.pickupTime": document.getElementById("editpickupTime").value,
+      "packageDetails.expectedDelivery": document.getElementById("editexpectedDelivery").value,
+      "packageDetails.width": document.getElementById("editwidth2").value,
+      "packageDetails.shippingFee": document.getElementById("editshippingFee").value,
+      "packageDetails.paymetStatus": document.getElementById("editpaymentStatus").value,
+      "packageDetails.btc": document.getElementById("editbtc").value,
+      
+
+
+      
+      updatedAt: serverTimestamp()
+    });
+
+    alert("Shipment updated successfully!");
+    closeEditForm();
+    loadShipments();
+
+  } catch (error) {
+    console.error(error);
+    alert("Error updating shipment");
+  }
+}
+
+function closeEditForm() {
+   document.getElementById("editModal").style.display = "none";
+}
+
+
+window.closeEditForm = function () {
+  document.getElementById("editModal").style.display = "none";
+}
+
+
 
 // ===============================
 // TRACKING AND SEARCH FUNCTIONALITY
@@ -658,7 +794,12 @@ searchBtn.addEventListener("click", async () => {
     }
 
     const data = snap.data();
-    const origin = `${data.shipper.state}, ${data.shipper.country}`;
+    //const origin = `${data.shipper.state}, ${data.shipper.country}`;
+
+    //TRANSIT MAP
+    const origin2 = `${data.shipper.country}`;
+    const transit = `${data.shipment.TrasitCountry}`;
+    const destination = `${data.receiver.country}`;
 
     trackingResult.innerHTML = `
       <div class="invoice">
@@ -674,50 +815,57 @@ searchBtn.addEventListener("click", async () => {
 
         <div class="invoice-grid">
           <div>
-            <h4>Shipper</h4>
+            <h4>Sender Details</h4>
             <p>${data.shipper.name}</p>
             <p>${data.shipper.phone}</p>
             <p>${data.shipper.country}</p>
             <p>${data.shipper.email}</p>
+            <p>${data.shipper.address || ""}</p>
           </div>
 
           <div>
-            <h4>Receiver</h4>
+            <h4>Receiver Details</h4>
             <p>${data.receiver.name}</p>
             <p>${data.receiver.phone}</p>
             <p>${data.receiver.country}</p>
             <p>${data.receiver.email}</p>
+            <p>${data.receiver.address || ""}</p>
           </div>
 
           <div>
-            <h4>Shipment</h4>
+            <h4>Shipment Details</h4>
             <p>Type: ${data.shipment.type}</p>
             <p>Product: ${data.shipment.product}</p>
+            <p>Weight: ${data.shipment.weight}kg</p>
+            <p>Quantity: ${data.shipment.quantity}</p>
             <p>Courier: ${data.shipment.courier}</p>
+            <p>Width: ${data.packageDetails.width}cm</p>
+            <h3 style="color: #2c541dea;">Transit country: ${data.shipment.TrasitCountry}</h3>
           </div>
 
+
           <div>
-            <h4>Package</h4>
-            <p>Weight: ${data.packageDetails.weight2}kg</p>
-            <p>Size: ${data.packageDetails.length} × ${data.packageDetails.width} × ${data.packageDetails.height}</p>
-            <p>Delivery: ${data.packageDetails.expectedDelivery}</p>
+            <h4>Package Details</h4>
+            Description: ${data.packageDetails.description}<br>
+            Departure Date: ${data.moreDetails.pickupDate}<br>
+            Expected Delivery: ${data.packageDetails.expectedDelivery}<br>
+            <h5 style="color: #c24d17ea;">Payment Transit Status: ${data.moreDetails.paymentTransitStatus}</h5>
           </div>
         </div>
 
         <div>
-          <h4>Payment</h4>
-          <p>Method: ${data.moreDetails.paymentMethod}</p>
-          <p>BTC: ${data.packageDetails.btc}</p>
-          <p>Shipping Fee: $${data.packageDetails.shippingFee.toLocaleString()}</p>
-          <p>Value: $${data.packageDetails.packageValue.toLocaleString()}</p>
-          <h2>TOTAL AMOUNT: $${(Number(data.packageDetails.packageValue) + Number(data.packageDetails.shippingFee)).toLocaleString()}</h2>
-          <p>Status: <span class="status">${data.packageDetails.paymetStatus}</span></p>
+          <h4>Payment Details</h4>
+          <h5>Payment Method: ${data.moreDetails.paymentMethod}<br></h5>
+          payment number: ${data.packageDetails.btc}<br>
+          Tax/Clearance charge: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
+          <h3 style="color: #356922ea;">TOTAL AMOUNT: $${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
+          Status: <b>${data.packageDetails.paymetStatus}</b>
           <iframe
-            src="https://www.google.com/maps?q=${encodeURIComponent(origin)}&z=12&output=embed"
+            src="https://www.google.com/maps?q=${encodeURIComponent(origin2 + " to " + transit + " to " + destination)}&output=embed"
             width="100%"
             height="400"
             style="border-radius:12px;border:0">
-        </iframe>
+          </iframe>
         </div>
       </div>
     `;

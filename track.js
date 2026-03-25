@@ -57,26 +57,13 @@ searchBtn.addEventListener("click", async () => {
     }
 
     const data = snap.data();
-    const origin = `${data.shipper.state}, ${data.shipper.country}`;
-    const destination = `${data.receiver.state}, ${data.receiver.country}`;
+    // const origin = `${data.shipper.state}, ${data.shipper.country}`;
 
-//     const mapUrl = `
-// https://maps.googleapis.com/maps/api/staticmap
-// ?size=800x400
-// &maptype=roadmap
-// &markers=color:green|label:S|${encodeURIComponent(origin)}
-// &markers=color:red|label:R|${encodeURIComponent(destination)}
-// &path=color:0xff0000ff|weight:4|${encodeURIComponent(origin)}|${encodeURIComponent(destination)}
-// &key=YOUR_GOOGLE_MAPS_API_KEY
-// `;
+    //TRANSIT MAP
+    const origin2 = `${data.shipper.country}`;
+    const transit = `${data.shipment.TrasitCountry}`;
+    const destination = `${data.receiver.country}`;
 
-
-        //   <img
-        //     src="${mapUrl}"
-        //     alt="Shipment Route"
-        //     style="width:100%; border-radius:12px; margin-top:15px"
-        //     />
-    
 
     trackingResult.innerHTML = `
       <div class="invoice">
@@ -92,50 +79,59 @@ searchBtn.addEventListener("click", async () => {
 
         <div class="invoice-grid">
           <div>
-            <h4>Shipper</h4>
+            <h4>Sender Details</h4>
             <p>${data.shipper.name}</p>
             <p>${data.shipper.phone}</p>
             <p>${data.shipper.country}</p>
             <p>${data.shipper.email}</p>
+            <p>${data.shipper.address || ""}</p>
           </div>
 
           <div>
-            <h4>Receiver</h4>
+            <h4>Receiver Details</h4>
             <p>${data.receiver.name}</p>
             <p>${data.receiver.phone}</p>
             <p>${data.receiver.country}</p>
             <p>${data.receiver.email}</p>
+            <p>${data.receiver.address || ""}</p>
           </div>
 
           <div>
-            <h4>Shipment</h4>
+            <h4>Shipment Details</h4>
             <p>Type: ${data.shipment.type}</p>
             <p>Product: ${data.shipment.product}</p>
+            <p>Weight: ${data.shipment.weight}kg</p>
+            <p>Quantity: ${data.shipment.quantity}</p>
             <p>Courier: ${data.shipment.courier}</p>
+            <p>Width: ${data.packageDetails.width}cm</p>
+            <h3 style="color: #2c541dea;">Transit country: ${data.shipment.TrasitCountry}</h3>
           </div>
 
+          
+
+
           <div>
-            <h4>Package</h4>
-            <p>Weight: ${data.packageDetails.weight2}kg</p>
-            <p>Size: ${data.packageDetails.length} × ${data.packageDetails.width} × ${data.packageDetails.height}</p>
-            <p>Delivery: ${data.packageDetails.expectedDelivery}</p>
+            <h4> Package Details</h4>
+            Description: ${data.packageDetails.description}<br>
+            Departure Date: ${data.moreDetails.pickupDate}<br>
+            Expected Delivery: ${data.packageDetails.expectedDelivery}<br>
+            <h5 style="color: #c24d17ea;">Payment Transit Status: ${data.moreDetails.paymentTransitStatus}</h5>
           </div>
         </div>
 
         <div>
-          <h4>Payment</h4>
-          <p>Method: ${data.moreDetails.paymentMethod}</p>
-          <p>BTC: ${data.packageDetails.btc}</p>
-          <p>Shipping Fee: $${data.packageDetails.shippingFee.toLocaleString()}</p>
-          <p>Value: $${data.packageDetails.packageValue.toLocaleString()}</p>
-          <h2>TOTAL AMOUNT: $${(Number(data.packageDetails.packageValue) + Number(data.packageDetails.shippingFee)).toLocaleString()}</h2>
-          <p>Status: <span class="status">${data.packageDetails.paymetStatus}</span></p>
+          <h4>Payment Details</h4>
+          <h5>Payment Method: ${data.moreDetails.paymentMethod}<br></h5>
+          payment number: ${data.packageDetails.btc}<br>
+          Tax/Clearance charge: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
+          <h3 style="color: #356922ea;">TOTAL AMOUNT: $${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
+          Status: <b>${data.packageDetails.paymetStatus}</b>
            <iframe
-            src="https://www.google.com/maps?q=${encodeURIComponent(origin)}&z=12&output=embed"
+            src="https://www.google.com/maps?q=${encodeURIComponent(origin2 + " to " + transit + " to " + destination)}&output=embed"
             width="100%"
             height="400"
             style="border-radius:12px;border:0">
-        </iframe>
+          </iframe>
         </div>
       </div>
     `;
