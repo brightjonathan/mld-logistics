@@ -14,6 +14,7 @@ import {
   addDoc,
   serverTimestamp,
   query,
+  where,
   orderBy,
   onSnapshot,
   deleteDoc,
@@ -171,8 +172,16 @@ shipmentForm.addEventListener("submit", async (e) => {
     const paymetStatus = document.getElementById("paymentStatus").value;
     const btc = document.getElementById("btc").value;
 
+    function generateTrackingID() {
+      const prefix = "AHG"; // you can change this to your company code
+      const randomNumber = Math.floor(10000000 + Math.random() * 90000000); // 8-digit number
+      return `${prefix}-${randomNumber}`;
+    }
+    const trackingID = generateTrackingID();
+
     // SAVE TO FIRESTORE
     await addDoc(collection(db, "SHIPMENT"), {
+      trackingID: trackingID, // ✅ store custom ID
       author: {
         name: 'ADMIN',
         id: auth.currentUser.uid,
@@ -454,9 +463,9 @@ function renderShipments(shipments) {
         <div>
           <strong>Tracking ID:</strong>
           <span class="tracking-id"
-            onclick="navigator.clipboard.writeText('${data.id}')"
+            onclick="navigator.clipboard.writeText('${data.trackingID || data.id}')"
             title="Click to copy">
-            ${data.id}
+            ${data.trackingID || data.id}
           </span>
         </div>
         <div>
@@ -529,6 +538,8 @@ function renderShipments(shipments) {
       </div>
     `;
 
+    //TRACKING ID
+    const trackingID = data.trackingID || data.id;
 
     // ✏️ EDIT SHIPMENT
     div.querySelector(".edit-btn").addEventListener("click", () => {
@@ -545,7 +556,7 @@ function renderShipments(shipments) {
 
     // 📄 DOWNLOAD PDF
     div.querySelector(".pdf-btn").addEventListener("click", () => {
-      downloadPDF(div, data.id);
+      downloadPDF(div, data.trackingID || data.id);
     });
 
     async function downloadPDF(element, id) {
@@ -598,7 +609,7 @@ function renderShipments(shipments) {
 
   // Generate QR (Tracking link or ID)
   new QRCode(qrContainer, {
-    text: `Tracking ID: ${id}`, // 👉 you can change to a URL
+    text: `Tracking ID: ${trackingID}`, // 👉 you can change to a URL
     width: 80,
     height: 80
   });
@@ -625,7 +636,7 @@ function renderShipments(shipments) {
   pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
 
   // Save
-  pdf.save(`MLD-Receipt-${id}.pdf`);
+  pdf.save(`MLD-Receipt-${trackingID}.pdf`);
 
   // Clean up
   document.body.removeChild(clone);
@@ -787,15 +798,19 @@ searchBtn.addEventListener("click", async () => {
   trackingResult.innerHTML = "Searching...";
 
   try {
-    const ref = doc(db, "SHIPMENT", trackingId);
-    const snap = await getDoc(ref); // ✅ FIX
+      // const ref = doc(db, "SHIPMENT", trackingId);
+      const q = query(
+    collection(db, "SHIPMENT"),
+    where("trackingID", "==", trackingId)
+  );
+    const snap = await getDocs(q); // ✅ FIX
 
-    if (!snap.exists()) {
+    if (snap.empty) {
       trackingResult.innerHTML = "<p>No shipment found.</p>";
       return;
     }
 
-    const data = snap.data();
+    const data = snap.docs[0].data();
     //const origin = `${data.shipper.state}, ${data.shipper.country}`;
 
     //TRANSIT MAP
@@ -859,8 +874,8 @@ searchBtn.addEventListener("click", async () => {
           <h4>Payment Details</h4>
           <h5>Payment Method: ${data.moreDetails.paymentMethod}<br></h5>
           payment number: ${data.packageDetails.btc}<br>
-          Tax/Clearance charge: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
-          <h3 style="color: #356922ea;">TOTAL AMOUNT: $${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
+          Tax/Clearance charge: ${(data.packageDetails.shippingFee)}<br>
+          <h3 style="color: #356922ea;">TOTAL AMOUNT: ${((data.packageDetails.shippingFee))}</h3>
           Status: <b>${data.packageDetails.paymetStatus}</b>
           <iframe
             src="https://www.google.com/maps?q=${encodeURIComponent(origin2 + " to " + transit + " to " + destination)}&output=embed"

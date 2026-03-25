@@ -7,6 +7,10 @@ import {
   getFirestore,
   doc,
   getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 
@@ -48,15 +52,19 @@ searchBtn.addEventListener("click", async () => {
   trackingResult.innerHTML = "Searching...";
 
   try {
-    const ref = doc(db, "SHIPMENT", trackingId);
-    const snap = await getDoc(ref); // ✅ FIX
+    // const ref = doc(db, "SHIPMENT", trackingId);
+    const q = query(
+      collection(db, "SHIPMENT"),
+      where("trackingID", "==", trackingId)
+    );
+    const snap = await getDocs(q); // ✅ FIX
 
-    if (!snap.exists()) {
+    if (snap.empty) {
       trackingResult.innerHTML = "<p>No shipment found.</p>";
       return;
     }
 
-    const data = snap.data();
+    const data = snap.docs[0].data();
     // const origin = `${data.shipper.state}, ${data.shipper.country}`;
 
     //TRANSIT MAP
@@ -123,8 +131,8 @@ searchBtn.addEventListener("click", async () => {
           <h4>Payment Details</h4>
           <h5>Payment Method: ${data.moreDetails.paymentMethod}<br></h5>
           payment number: ${data.packageDetails.btc}<br>
-          Tax/Clearance charge: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
-          <h3 style="color: #356922ea;">TOTAL AMOUNT: ${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
+          Tax/Clearance charge: ${(data.packageDetails.shippingFee)}<br>
+          <h3 style="color: #356922ea;">TOTAL AMOUNT: ${((data.packageDetails.shippingFee))}</h3>
           Status: <b>${data.packageDetails.paymetStatus}</b>
            <iframe
             src="https://www.google.com/maps?q=${encodeURIComponent(origin2 + " to " + transit + " to " + destination)}&output=embed"
