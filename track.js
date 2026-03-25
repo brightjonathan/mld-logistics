@@ -100,11 +100,11 @@ searchBtn.addEventListener("click", async () => {
             <h4>Shipment Details</h4>
             <p>Type: ${data.shipment.type}</p>
             <p>Product: ${data.shipment.product}</p>
-            <p>Weight: ${data.shipment.weight}kg</p>
+            <p>Weight: ${data.shipment.weight}</p>
             <p>Quantity: ${data.shipment.quantity}</p>
             <p>Courier: ${data.shipment.courier}</p>
             <p>Width: ${data.packageDetails.width}cm</p>
-            <h3 style="color: #2c541dea;">Transit country: ${data.shipment.TrasitCountry}</h3>
+            <h3 style="color: #2c541dea;">Current Location: ${data.shipment.TrasitCountry}</h3>
           </div>
 
           
@@ -115,7 +115,7 @@ searchBtn.addEventListener("click", async () => {
             Description: ${data.packageDetails.description}<br>
             Departure Date: ${data.moreDetails.pickupDate}<br>
             Expected Delivery: ${data.packageDetails.expectedDelivery}<br>
-            <h5 style="color: #c24d17ea;">Payment Transit Status: ${data.moreDetails.paymentTransitStatus}</h5>
+            <h5 style="color: #c24d17ea;">Transit Status: ${data.moreDetails.paymentTransitStatus}</h5>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ searchBtn.addEventListener("click", async () => {
           <h5>Payment Method: ${data.moreDetails.paymentMethod}<br></h5>
           payment number: ${data.packageDetails.btc}<br>
           Tax/Clearance charge: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
-          <h3 style="color: #356922ea;">TOTAL AMOUNT: $${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
+          <h3 style="color: #356922ea;">TOTAL AMOUNT: ${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
           Status: <b>${data.packageDetails.paymetStatus}</b>
            <iframe
             src="https://www.google.com/maps?q=${encodeURIComponent(origin2 + " to " + transit + " to " + destination)}&output=embed"

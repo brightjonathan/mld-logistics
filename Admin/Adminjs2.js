@@ -490,11 +490,11 @@ function renderShipments(shipments) {
           <h4>Shipment Details</h4>
           Type: ${data.shipment.type}<br>
           Product: ${data.shipment.product}<br>
-          weight: ${data.shipment.weight}kg<br>
+          weight: ${data.shipment.weight}<br>
           Quantity: ${data.shipment.quantity}<br>
           Courier: ${data.shipment.courier} <br>
           Width: ${data.packageDetails.width}cm
-          <h3 style="color: #2c541dea;">Transit country: ${data.shipment.TrasitCountry}</h3>
+          <h3 style="color: #2c541dea;">Current Location: ${data.shipment.TrasitCountry}</h3>
         </div>
 
         
@@ -514,11 +514,11 @@ function renderShipments(shipments) {
       <div class="section">
         <h4>Payment Details</h4>
         <h5>Payment Method: ${data.moreDetails.paymentMethod}<br></h5>
-       payment number: <span style="word-break: break-all; overflow-wrap: anywhere; display:inline-block; max-width:100%;">
+         payment number: <span style="word-break: break-all; overflow-wrap: anywhere; display:inline-block; max-width:100%;">
           ${data.packageDetails.btc}
         </span><br>
-        Tax/Clearance charge: $${Number(data.packageDetails.shippingFee).toLocaleString()}<br>
-        <h3 style="color: #356922ea;">TOTAL AMOUNT: $${(Number(data.packageDetails.shippingFee)).toLocaleString()}</h3>
+        Tax/Clearance charge: ${data.packageDetails.shippingFee}<br>
+        <h3 style="color: #356922ea;">TOTAL AMOUNT: ${data.packageDetails.shippingFee}</h3>
         Status: <b>${data.packageDetails.paymetStatus}</b>
       </div>
 
@@ -851,7 +851,7 @@ searchBtn.addEventListener("click", async () => {
             Description: ${data.packageDetails.description}<br>
             Departure Date: ${data.moreDetails.pickupDate}<br>
             Expected Delivery: ${data.packageDetails.expectedDelivery}<br>
-            <h5 style="color: #c24d17ea;">Payment Transit Status: ${data.moreDetails.paymentTransitStatus}</h5>
+            <h5 style="color: #c24d17ea;">Transit Status: ${data.moreDetails.paymentTransitStatus}</h5>
           </div>
         </div>
 
