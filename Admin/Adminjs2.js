@@ -461,15 +461,6 @@ function renderShipments(shipments) {
     div.innerHTML = `
       <div class="invoice-header">
 
-      <div style="text-align:center; margin-bottom:15px;">
-      <img src="https://i.ibb.co/v4s35hxr/favicon.png" 
-           alt="Company Logo" 
-           style="width:35%; height:auto;">
-           <img src="https://i.ibb.co/XrB1Lz1H/img23-removebg-preview.png" 
-           alt="Company Logo" 
-           style="width:35%; height:auto;">
-      </div>
-
         <div>
           <strong>Tracking ID:</strong>
           <span class="tracking-id"
